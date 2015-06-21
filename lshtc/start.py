@@ -5,96 +5,199 @@ import numpy as np
 from collections import OrderedDict
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.neighbors import NearestNeighbors
-label=[]
-row=[]
-col=[]
-data=[]
-max_col=0;
+from sklearn.metrics import coverage_error
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import f1_score
+from sklearn.metrics import zero_one_loss
+from sklearn.metrics import classification_report
+
+train_label=[]
+train_row=[]
+train_col=[]
+train_data=[]
+max_train_col=0;
 i=0;
-filename = 'trainsub.csv'
+train_filename = 'cros_file.csv'
 t1=datetime.datetime.now();
-with open(filename, newline='') as f:
+with open(train_filename, newline='') as f:
     reader = csv.reader(f)
     try:
         for ro in reader:
             
-            label.append(ro)
-            x=label[i][len(label[i])-1].split()
-            label[i][len(label[i])-1]=int(x[0])
-           # print(label)
+            train_label.append(ro)
+            x=train_label[i][len(train_label[i])-1].split()
+            train_label[i][len(train_label[i])-1]=int(x[0])
+           # print(train_label)
             
             #print(x)
             print(i)
-            label[i]=[int(i) for i in label[i]]
+            train_label[i]=[int(i) for i in train_label[i]]
             del x[0]
             
             x=[line.split(':',1) for line in x]
             for l in range(len(x)):
-               # print(type(row),type(i))
-                row.append(int(i))
-                #print(type(col),type(x[l][0]))
-                col.append(int(x[l][0]))
-                if max_col< int(x[l][0]):
-                    max_col=int(x[l][0])
-                data.append(int(x[l][1]))
+               # print(type(train_row),type(i))
+                train_row.append(int(i))
+                #print(type(train_col),type(x[l][0]))
+                train_col.append(int(x[l][0]))
+                if max_train_col< int(x[l][0]):
+                    max_train_col=int(x[l][0])
+                train_data.append(int(x[l][1]))
             i=i+1    
             
             
     except csv.Error as e:
         sys.exit('file {}, line {}: {}'.format(filename, reader.line_num, e))
 
-print(max_col)
-#row=np.array(row)
-#row=[int(i) for i in row]
-print(type(row))
-#print (row)
-#col=np.array(col)
-#col=[int(i) for i in col]
-print(type(col))
-#print (col)
-#data=np.array(data)
-#data=[int(i) for i in data]
-#print(data)
-print (len(row), len(col), len(data))
-print(row[111],col[111],data[111])
+print(max_train_col)
+#train_row=np.array(train_row)
+#train_row=[int(i) for i in train_row]
+print(type(train_row))
+#print (train_row)
+#train_col=np.array(train_col)
+#train_col=[int(i) for i in train_col]
+print(type(train_col))
+#print (train_col)
+#train_data=np.array(train_data)
+#train_data=[int(i) for i in train_data]
+#print(train_data)
+print (len(train_row), len(train_col), len(train_data))
+print(train_row[111],train_col[111],train_data[111])
 
-# print (row)
+# print (train_row)
 
-# print(len(row))
-# print(col)
-# print(len(col))
-# print(data)
-# print(len(data))
-# print(i,row[len(row)-1])
+# print(len(train_row))
+# print(train_col)
+# print(len(train_col))
+# print(train_data)
+# print(len(train_data))
+# print(i,train_row[len(train_row)-1])
+max_train_col=2086000
 
-A=csr_matrix( (data,(row,col)), shape=(i,max_col+1),dtype=int16 )
+A=csr_matrix( (train_data,(train_row,train_col)), shape=(i,max_train_col+1),dtype=int16 )
+train_row=[];train_col=[];train_data=[];
 print(type(A),size(A))
 print(sys.getsizeof(A))
-a=[0]*(max_col+1);
+#a=[0]*(max_train_col+1);
 neigh=NearestNeighbors(1)
 neigh.fit(A)
 print()
-near_neigh=neigh.kneighbors([a],9)
-dist={}
-l=0;
-for i in range(len(near_neigh[1][0])):
-    if i!=0 and near_neigh[0][0][i]!=near_neigh[0][0][i-1]:
-        l=l+1
-    for j in label[near_neigh[1][0][i]]:
-        if j in dist:
-            dist[j]=dist[j]+1/(l+1)
-        else:
-            dist[j]=1/(l+1)
 
-result=[]    
-Dist_ordered=OrderedDict(sorted(dist.items(),key=lambda t:-t[1]))
-Dist_list=list(Dist_ordered.items())
-alpha=0.5;
-for  i in range(len(Dist_list)):
-    if Dist_list[i][1] >= alpha:
-        result.append(Dist_list[i][0])
 
-        
+
+cros_label=[]
+cros_row=[]
+cros_col=[]
+cros_data=[]
+max_cros_col=0;
+i=0;
+cros_filename = 'test_file.csv'
+t1=datetime.datetime.now();
+with open(cros_filename, newline='') as f:
+    reader = csv.reader(f)
+    try:
+        for ro in reader:
+            
+            cros_label.append(ro)
+            x=cros_label[i][len(cros_label[i])-1].split()
+            cros_label[i][len(cros_label[i])-1]=int(x[0])
+           # print(cros_label)
+            
+            #print(x)
+            print(i)
+            cros_label[i]=[int(i) for i in cros_label[i]]
+            del x[0]
+            
+            x=[line.split(':',1) for line in x]
+            for l in range(len(x)):
+               # print(type(cros_row),type(i))
+                cros_row.append(int(i))
+                #print(type(cros_col),type(x[l][0]))
+                cros_col.append(int(x[l][0]))
+                if max_cros_col< int(x[l][0]):
+                    max_cros_col=int(x[l][0])
+                cros_data.append(int(x[l][1]))
+            i=i+1    
+            
+            
+    except csv.Error as e:
+        sys.exit('file {}, line {}: {}'.format(filename, reader.line_num, e))
+
+print(max_cros_col)
+#cros_row=np.array(cros_row)
+#cros_row=[int(i) for i in cros_row]
+print(type(cros_row))
+#print (cros_row)
+#cros_col=np.array(cros_col)
+#cros_col=[int(i) for i in cros_col]
+print(type(cros_col))
+#print (cros_col)
+#cros_data=np.array(cros_data)
+#cros_data=[int(i) for i in cros_data]
+#print(cros_data)
+print (len(cros_row), len(cros_col), len(cros_data))
+print(cros_row[111],cros_col[111],cros_data[111])
+
+# print (cros_row)
+
+# print(len(cros_row))
+# print(cros_col)
+# print(len(cros_col))
+# print(cros_data)
+# print(len(cros_data))
+# print(i,cros_row[len(cros_row)-1])
+
+max_cros_col=2086000
+C=csr_matrix( (cros_data,(cros_row,cros_col)), shape=(i,max_cros_col+1),dtype=int16 )
+cros_row=[];cros_col=[];cros_data=[];
+print(type(A),size(A))
+print(sys.getsizeof(A))
+#a=[0]*(max_cros_col+1);
+
+result=[]
+near_neigh=neigh.kneighbors(C,9)
+print(near_neigh)
+for s in range(len(near_neigh[1])):
+    
+    dist={}
+    l=0;
+    for i in range(len(near_neigh[1][s])):
+        if i!=0 and near_neigh[0][s][i]!=near_neigh[0][s][i-1]:
+            l=l+1
+        for j in train_label[near_neigh[1][s][i]]:
+            if j in dist:
+                dist[j]=dist[j]+1/(l+1)
+            else:
+                dist[j]=1/(l+1)
+    print (s)
+    
+    result.append([])
+    print(result)
+    Dist_ordered=OrderedDict(sorted(dist.items(),key=lambda t:-t[1]))
+    Dist_list=list(Dist_ordered.items())
+    print(Dist_list)
+    alpha=1.5;
+    for  i in range(len(Dist_list)):
+        if Dist_list[i][1] >= alpha:
+            result[s].append(Dist_list[i][0])
+
+print(result)
+print()
+print(cros_label)
+print(accuracy_score(cros_label,result))
+print(f1_score(cros_label,result))# returns the f1 score total;
+print(f1_score(cros_label,result,average=None)) # returns f1 score of all the class
+print(f1_score(cros_label,result,average='micro')) #returns average f1 score of all class
+print(f1_score(cros_label,result,average='macro')) #same but takes care of imbalance
+print(f1_score(cros_label,result,average='weighted')) #average weighted by support.
+
+
+print(zero_one_loss(cros_label,result))
+print(zero_one_loss(cros_label,result,normalize=False))
+
+
+#print(coverage_error(cros_label,result));
+
     
 
 # print()
