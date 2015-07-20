@@ -1,0 +1,507 @@
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import static java.lang.Math.log;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
+
+
+
+ public class MAL 
+ {
+      int[] helm = new int[5];
+     public static void main(String[] args) throws IOException
+     {
+         MAL hell = new MAL();
+         hell.go();
+         
+         
+     }
+     
+     double compare(HashMap<String, Integer> a, HashMap<String, Integer> b)
+     {
+         double comp=0;
+         double a1=0;
+       for(String key : a.keySet())
+       {
+           if(b.containsKey(key))
+           {
+               comp = comp + b.get(key) * a.get(key);
+           }
+           a1 = a1 + a.get(key)*a.get(key);
+       }
+       a1 = Math.sqrt(a1);
+       double b1=0;
+       for (String key:b.keySet())
+       {
+           b1 = b1 + b.get(key)*b.get(key);
+       }
+       b1 = Math.sqrt(b1);
+       
+       return comp/(a1*b1);
+             
+         
+     }
+     
+     void go() throws FileNotFoundException, IOException
+     {
+         
+         Hashtable<String, String> vector = new Hashtable<String, String>();
+        
+         
+        
+         FileReader fr = new FileReader("/home/vakhil/Desktop/cros_file.csv");
+     
+            BufferedReader tr = new BufferedReader(fr);
+           
+         
+         String whole;
+     
+        
+   
+           while((whole = tr.readLine()) != null)
+               {
+                  String[] yolk = whole.split(",");
+                 
+                  String[] feature = yolk[yolk.length-1].split(" ");
+                  String[] pain;
+                  for(int z=2;z<feature.length;z++)
+                  {
+                   pain = feature[z].split(":");
+                   vector.put(pain[0], "0");               
+                   
+                  }
+                  
+               }
+           
+           
+         FileReader kr = new FileReader("/home/vakhil/Desktop/train_file.csv");
+      
+            BufferedReader zr = new BufferedReader(kr);
+            
+            
+         
+            String ug;
+            while((ug = zr.readLine()) != null)
+               {
+                    String[] piece = ug.split(", ");
+                    int a = piece.length;
+                    String[] feature = piece[a-1].split(" ");
+                  
+                 for(int z=1;z<feature.length;z++)
+                 {
+                     String[] pork = feature[z].split(":");
+                    
+                     if(vector.containsKey(pork[0]))
+                     {
+                         int R =Integer.decode(vector.get(pork[0])) ;
+                         R=R+1;
+                         vector.put(pork[0], String.valueOf(R));
+                         
+                     }
+                     else
+                     {
+                         vector.put(pork[0], "1");
+                     }
+                     
+                     
+                 }
+                   
+
+     }
+            /*
+            
+           PrintWriter writer = new PrintWriter("/home/vakhil/Desktop/pb.txt", "UTF-8");
+                            
+    for (String key : vector.keySet()) {
+        
+                   double kl = Double.valueOf(vector.get(key));
+                   kl = Math.log10(2365437.0/kl)/Math.log10(2);
+                   vector.put(key, String.valueOf(kl));
+                   
+                      writer.println(key +" "+ kl);
+                        }
+    
+    */
+                            
+                            
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        FileReader kcr = new FileReader("/home/vakhil/Desktop/cros_file.csv");
+     
+            BufferedReader jumbo = new BufferedReader(kcr);
+            
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+            String line ;
+            int home=0;
+            while(((line = jumbo.readLine()) != null) && home<10)
+             {
+                 HashMap<String, String> rg = new HashMap<String,String>();  
+                 
+                 HashMap<String, Integer> yolo = new HashMap<>();
+                   
+                  List<String> list = new ArrayList<String>();
+                  
+                 String[] pen = line.split(",");
+                 
+                 String[] fd = pen[pen.length-1].split(" ");
+                 for(int bf=0;bf<pen.length;bf++)
+                 {
+                     if(bf==pen.length-1)
+                     {
+                        list.add(fd[0]);
+                        break;
+                     }
+                    list.add(pen[bf]);
+                 }
+                 double[] tf = new double[fd.length-2];
+                 for(int z=2;z<fd.length;z++)
+                 {
+                     String[] pic = fd[z].split(":");
+                   yolo.put(pic[0], Integer.decode(pic[1]));
+                     double idf = Double.valueOf(vector.get(pic[0]));
+                     if(idf==0)
+                     {
+                         tf[z-2]=0;
+                     }
+                         else
+                     {
+                     idf = 1/idf;
+                     
+                     tf[z-2] = Double.valueOf(pic[1])*idf;
+                     }
+                       rg.put( pic[0], String.valueOf(tf[z-2]) );
+                 }
+                
+             String a=null ;
+                 String b=null ;
+                 String c=null ;
+                 
+                 Arrays.sort(tf);
+                 for (Entry<String, String> entry : rg.entrySet())
+                 {
+                             if (entry.getValue().equals(String.valueOf(tf[tf.length-1])))
+                                 a = entry.getKey();
+                             
+                             if (entry.getValue().equals(String.valueOf(tf[tf.length-2])))
+                                 b = entry.getKey();
+                             
+                             if (tf.length >2 && entry.getValue().equals(String.valueOf(tf[tf.length-3])))
+                                 c = entry.getKey();                            
+                     
+                 }
+                 int a1=0;
+                 int b1=0;
+                 int c1=0;
+                 
+                 if(c==null)
+                     System.out.println("Stop");
+                 if(a!=null)
+                  a1 = Integer.decode(a);
+                 if(b!=null)
+                  b1 = Integer.decode(b);
+                 if(c!=null)
+                 c1 = Integer.decode(c);
+                 
+                 
+                 
+                 FileReader ppr = new FileReader("/home/vakhil/Desktop/train_file.csv");
+      
+            BufferedReader ssh = new BufferedReader(ppr);
+           
+            String uzb;
+            boolean gf=false;
+           ArrayList<Integer> pogo = new ArrayList<>();
+            int ntpc=1;
+            
+            HashMap<Integer,Integer> hh = new HashMap<>();
+            
+            int[] top;
+              while((uzb = ssh.readLine()) != null)
+              {
+                 
+                                                                                                                                                                                                                       String[] piece = uzb.split(", ");
+                    int alrd = piece.length;
+                    String[] feature = piece[alrd-1].split(" ");
+                  
+                 for(int z=1;z<feature.length;z++)
+                 {
+                     String[] pork = feature[z].split(":");
+                     int jam = Integer.decode(pork[0]);
+                     
+                     if(jam==a1 || jam==b1 || jam ==c1)
+                     {
+                        
+                         pogo.add(ntpc);
+                         HashMap<String,Integer> common = new HashMap<>();
+                         for(int bf=1;bf<feature.length;bf++)
+                         {
+                            
+                             common.put(feature[bf].split(":")[0], 1);
+                         }
+                         
+                         for(int bf=1;bf<fd.length;bf++)
+                         {
+                             String uiz = fd[bf].split(":")[0];
+                             if(common.containsKey(uiz ))
+                             {
+                                 common.put(uiz, 5);
+                             }
+                         }
+                         int hell=0;
+                         for(String key: common.keySet())
+                         {
+                             if(common.get(key)!=1)
+                                 hell++;
+                         }
+                         double camel = (double) (feature.length-1+fd.length-1+hell);
+                         double fox = (double) hell;
+                    double yk = 1 - (fox/camel)   ; 
+                    yk=yk*10000000;
+                    int fuck = (int) yk;
+                             hh.put(ntpc, fuck);
+                         break;
+                             
+                     }
+                     
+                     
+                 }
+                 
+                 
+                 
+                 
+                 ntpc++;
+
+             }
+              top = new int[pogo.size()];
+              
+              for(int bf=0;bf<pogo.size();bf++)
+              {
+                  top[bf] = hh.get(pogo.get(bf));
+                 
+              }
+              
+              
+             
+              ValueComparator bvc =  new ValueComparator(hh);
+        TreeMap<Integer, Integer> sorted_map = new TreeMap<Integer, Integer>(bvc);
+        sorted_map.putAll(hh);
+        
+        int t=0;
+        
+    for(int key : sorted_map.keySet() )
+    {
+        
+        if(t>6)
+            break;
+        
+        if(t==0)
+        { helm[0]=key;
+       
+        }
+        
+        if(t==1)
+            helm[1]=key;
+        if(t==2)
+            helm[2]=key;
+        if(t==3)
+            helm[3]=key;
+        if(t==4)
+            helm[4]=key;
+        
+        t++;
+    }
+              
+    
+              
+         Arrays.sort(helm);
+              List<String> tiger = new ArrayList<>();
+                FileReader kar = new FileReader("/home/vakhil/Desktop/train_file.csv");
+      
+            BufferedReader zar = new BufferedReader(kar);
+              
+               
+             
+              
+            
+              t=1;
+              HashMap<String, Integer> bboy = new HashMap<>();
+               while((ug = zar.readLine()) != null)
+               {
+                   if(t==(helm[0]) || t==(helm[1]) || t==(helm[2]) || t==(helm[3]) || t==(helm[4]))
+                   {
+                          
+                              String[] piece = ug.split(", ");
+                    
+                     for(int bf=0;bf<piece.length;bf++)
+                     {
+                         if(bf==piece.length-1)
+                         {
+                            String[] urine = piece[piece.length-1].split(" ");
+                            if(!tiger.contains(urine[0]))
+                            tiger.add(urine[0]);
+                            break;
+                         }
+                         
+                         if(!tiger.contains(piece[bf]))
+                         tiger.add(piece[bf]);
+                         
+                     }
+                     
+                   }
+                   
+                   t++;
+                   
+                   
+               }
+              
+               HashMap<String, Integer>[] bengal = new HashMap[tiger.size()];
+               for(int u=0;u<tiger.size();u++)
+               {
+                   bengal[u] = new HashMap<>();
+               }
+               
+             FileReader car = new FileReader("/home/vakhil/Desktop/train_file.csv");
+         HashMap< String , HashMap<String, Integer> > sjk = new HashMap<>();
+         for(int bf=0;bf<tiger.size();bf++)
+         {
+             sjk.put(tiger.get(bf), bengal[bf]);
+                          
+         }
+            BufferedReader tar = new BufferedReader(car);
+          
+              String aids;
+            while((aids = tar.readLine()) != null )
+            {
+                      String[] piece = aids.split(", ");
+                    int alrd = piece.length;
+                    String[] feature = piece[alrd-1].split(" ");
+                    piece[alrd-1] = feature[0];
+                    for(int bf=0;bf<piece.length;bf++)
+                    {
+                        
+                        if(sjk.containsKey(piece[bf]))
+                        {
+                            
+                                for(int gaf=1;gaf<feature.length;gaf++)
+                                {
+                                    String[] pork = feature[gaf].split(":");
+                                    if(sjk.get(piece[bf]).containsKey(pork[0]))
+                                    {
+                                        sjk.get(piece[bf]).put(pork[0],sjk.get(piece[bf]).get(pork[0]) +Integer.decode(pork[1]));
+                                                
+                                                
+                                    }
+                                    else
+                                    sjk.get(piece[bf]).put(pork[0], Integer.decode(pork[1]));
+                                }
+                            
+                        }
+                    }
+                
+            }
+            
+         HashMap<String, Double> julie = new HashMap<>();
+         double[] yuk = new double[tiger.size()];
+         for(int bf=0;bf<tiger.size();bf++)
+         {
+             yuk[bf] = compare(sjk.get(tiger.get(bf)),yolo);
+            julie.put(tiger.get(bf),yuk[bf]);
+             
+         }
+            Arrays.sort(yuk);
+            
+            String[] g = new String[5];
+          int baf=yuk.length-1;
+            for (Entry<String, Double> entry : julie.entrySet())
+                 {
+                             if (entry.getValue().equals(yuk[baf]))
+                                 g[0]= entry.getKey();
+                             
+                            if (baf>0&& entry.getValue().equals(yuk[baf-1]))
+                                 g[1]= entry.getKey();
+                            if (baf>1 && entry.getValue().equals(yuk[baf-2]))
+                                 g[2]= entry.getKey();
+                            if (baf>2 && entry.getValue().equals(yuk[baf-3]))
+                                 g[3]= entry.getKey();
+                            if (baf>3 && entry.getValue().equals(yuk[baf-4]))
+                                 g[4]= entry.getKey();
+                              
+                             
+                             
+                     
+                 }
+            int common=0;
+              for(int y=0;y<5;y++)
+              {
+                  if(list.contains(g[y]))
+                  {
+                      common++;
+                  }
+              }
+              double P = common/5;
+              double R = common/list.size();
+              double score = 2*P*R;
+             score = score/(P+R);
+             System.out.println("Score Is "+ score);
+                 System.out.println(g[0] + " "+ g[1]+" " + g[2] + " " + g[3] + " " + g[4]+ " ");
+                 home++;
+             }
+            
+               
+           
+           
+           tr.close();
+     }
+ }
+
+        
+           
+     
+        
+               
+               
+ 
+          
+                     
+                    
+            
+                
+         
+   
+               
+              
+         class ValueComparator implements Comparator<Integer> {
+
+    Map<Integer, Integer> base;
+    public ValueComparator(Map<Integer, Integer> base) {
+        this.base = base;
+    }
+
+    // Note: this comparator imposes orderings that are inconsistent with equals.    
+    public int compare(Integer a, Integer b) {
+        if (base.get(a) >= base.get(b)) {
+            return 1;
+        } else {
+            return -1;
+        } // returning 0 would merge keys
+    }
+}
+         
+         
+         
+     
+     
+ 

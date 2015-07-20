@@ -1,4 +1,4 @@
-
+#code for making a heierarchy cycle free
 
 import static com.sun.org.apache.xerces.internal.util.Status.SET;
 import java.io.IOException;
@@ -33,11 +33,10 @@ import org.jgrapht.traverse.GraphIterator;
 public class Graph
 {
 
-    DirectedGraph<String, DefaultEdge> g =
-            new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
+    UndirectedGraph<String, DefaultEdge> g = new SimpleGraph<String, DefaultEdge>     (DefaultEdge.class);
     
 List<String> list = new ArrayList<String>();
-    private  DirectedGraph<String, DefaultEdge> createStringGraph() throws FileNotFoundException, IOException
+    private  UndirectedGraph<String, DefaultEdge> createStringGraph() throws FileNotFoundException, IOException
     {
         
         FileReader fr = new FileReader("/home/vakhil/hierarchy.txt");
@@ -107,50 +106,50 @@ List<String> list = new ArrayList<String>();
     
         try {
              
-            DirectedGraph<String, DefaultEdge> g= createStringGraph();
-            GraphIterator<String, DefaultEdge> it =   new BreadthFirstIterator<String, DefaultEdge>(g);
+            UndirectedGraph<String, DefaultEdge> g= createStringGraph();
+   
                // create a JGraphT graph
        
-      
-             while(it.hasNext())
-                   {
-                       String a = it.next();
-                       
-                       if(g.inDegreeOf(a)== 0)
-                       {
-                           list.add(a);
-                       }
-                  } 
-            g.addVertex("-1");
+          
+             
+          
             
-             for(int z=0;z<list.size();z++)
-             {
-                 g.addEdge("-1",list.get(z) );
-             }
+          
                  
-             GraphIterator<String, DefaultEdge> bt =   new BreadthFirstIterator<>(g, "-1");
-         int z=-1;
+            
+       
          Hashtable<String,String> kane = new Hashtable<>();
          String per =null;
-         PrintWriter writer = new PrintWriter("/home/vakhil/Desktop/hierarchy.txt", "UTF-8");
+        
+         GraphIterator<String, DefaultEdge> bt =   new BreadthFirstIterator<>(g, "-1");
+        
+         PrintWriter writer = new PrintWriter("/home/vakhil/Desktop/hierarchy_final.txt", "UTF-8");
               while(bt.hasNext())
               {
                   String a = bt.next();
                   kane.put(a, "visit");
-                      
-                   Set<DefaultEdge> jim = g.outgoingEdgesOf(a);
+                 
+                
+                
+                 
+                   Set<DefaultEdge> jim = g.edgesOf(a);
                    List<DefaultEdge> cum ;
                    cum = new ArrayList<>();
                    for(Iterator<DefaultEdge> iterator = jim.iterator(); iterator.hasNext();)
                    { 
-                       
+                       String pum;
                        DefaultEdge f = iterator.next();
-                       if(   !kane.containsKey(g.getEdgeTarget(f)) && g.getEdgeSource(f)!="-1"  )
+                       if(a.equals(g.getEdgeSource(f)))
+                           pum=g.getEdgeTarget(f);
+                       else
+                           pum = g.getEdgeSource(f);
+                      
+                       if(   !kane.containsKey(pum) && g.getEdgeSource(f)!="-1"  )
                        {
                        String yak= f.toString().substring(1, f.toString().length()-1);
                        
                         String[] dog = yak.split(":");
-                        System.out.println(dog[0]+dog[1]);
+                        
                          writer.println(dog[0]+dog[1]);
                        }
                        
@@ -161,7 +160,7 @@ List<String> list = new ArrayList<String>();
                    
                     }
                       
-           
+           writer.close();
                   
               }
         
