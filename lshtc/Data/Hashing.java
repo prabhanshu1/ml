@@ -1,4 +1,4 @@
-
+// This code is for hashing all the features and also finding idf values
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -32,7 +32,7 @@ public class Hashing {
     {
         
        PrintWriter writer = new PrintWriter("/home/vakhil/Desktop/train-number", "UTF-8");
-       PrintWriter w1 = new PrintWriter("/home/vakhil/Desktop/freq-hash", "UTF-8");
+       PrintWriter w1 = new PrintWriter("/home/vakhil/Desktop/feature-hash", "UTF-8");
         
       
             HashMap<String, Double> count = new HashMap<>();
@@ -78,7 +78,7 @@ public class Hashing {
                 if(count.get(key)>3 && count.get(key)<1700)
                 {
                     double uiz = 2128890/count.get(key);
-                    writer.println(key+" "+uiz);
+                    writer.println(u+" "+uiz);
                     
                     w1.println(key+" "+ u);
                    u++; 
